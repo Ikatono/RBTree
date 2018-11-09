@@ -6,6 +6,9 @@ data Color = Red | Black deriving (Eq, Show)
 
 data RBTree key val = Leaf | Node (RBTree key val) (RBTree key val) key val Color deriving (Show)
 
+testTree = (Node (Node Leaf Leaf 5 6 Red) (Node Leaf Leaf 12 12 Red) 8 (-3) Black)
+testInvalidTree = (Node (Node (Node Leaf Leaf 2 12 Black) Leaf 3 100 Black) Leaf 12 12 Black)
+
 --getColor :: RBTree val key -> Color
 getColor Leaf = Black
 getColor (Node _ _ _ _ c) = c
@@ -67,3 +70,15 @@ validateRBTree t =
             Nothing -> False
             Just _ -> True
     where h = blackHeight t
+
+rotl :: (RBTree key val) -> (Maybe (RBTree key val))
+rotl Leaf = Nothing
+rotl (Node _ Leaf _ _ _) = Nothing
+rotl (Node a (Node b c ky vy cy) kx vx cx) =
+    (Just (Node (Node a b kx vx cx) c ky vy cy))
+
+rotr :: (RBTree key val) -> (Maybe (RBTree key val))
+rotr Leaf = Nothing
+rotr (Node Leaf _ _ _ _) = Nothing
+rotr (Node (Node a b kx vx cx) c ky vy cy) =
+    (Just (Node a (Node b c ky vy cy) kx vx cx))
